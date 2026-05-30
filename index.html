@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>考研线性代数几何图像化学习系统</title>
+    
+    <!-- KaTeX 数学公式渲染样式 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    
+    <!-- Google Fonts 字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Outfit:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- 统一设计系统样式 -->
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 侧边栏导航 -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="6" y1="3" x2="6" y2="21"></line>
+                        <line x1="18" y1="3" x2="18" y2="21"></line>
+                        <line x1="3" y1="6" x2="21" y2="18"></line>
+                    </svg>
+                    <span>线代几何之光</span>
+                </div>
+                <span class="sub-logo">考研核心考纲直观可视</span>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul class="nav-list">
+                    <li>
+                        <button class="nav-item active" data-module="determinant">
+                            <span class="nav-icon">|A|</span>
+                            <span class="nav-text">行列式的几何意义</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="nav-item" data-module="transform">
+                            <span class="nav-icon">Ax</span>
+                            <span class="nav-text">矩阵与线性变换</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="nav-item" data-module="equations">
+                            <span class="nav-icon">x=b</span>
+                            <span class="nav-text">方程组解的几何空间</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="nav-item" data-module="vector">
+                            <span class="nav-icon">Span</span>
+                            <span class="nav-text">向量相关性与秩</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="nav-item" data-module="eigen">
+                            <span class="nav-icon">λv</span>
+                            <span class="nav-text">特征值与特征向量</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="nav-item" data-module="orthogonal">
+                            <span class="nav-icon">α⊥β</span>
+                            <span class="nav-text">施密特正交化</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="nav-item" data-module="quadratic">
+                            <span class="nav-icon">xᵀAx</span>
+                            <span class="nav-text">合同相似与正定</span>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <p>考研线代几何化复习系统</p>
+                <div class="github-link-placeholder">
+                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                    </svg>
+                    <span>D:\linear</span>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <!-- 几何画布渲染区 -->
+            <section class="canvas-section">
+                <!-- 3D 渲染容器 -->
+                <div id="three-container" class="canvas-container"></div>
+                <!-- 2D 绘图容器 (按需显示) -->
+                <div id="canvas-2d-container" class="canvas-container hidden">
+                    <canvas id="main-canvas-2d"></canvas>
+                </div>
+                <!-- 3D空间提示说明 -->
+                <div class="3d-controls-hint">
+                    <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M12 16v-4"></path>
+                        <path d="M12 8h.01"></path>
+                    </svg>
+                    <span>鼠标拖拽旋转，滚轮缩放，右键平移</span>
+                </div>
+            </section>
+            
+            <!-- 控制与代数映射面板 -->
+            <section class="control-section">
+                <div class="glass-panel">
+                    <!-- 动态注入模块标题与简介 -->
+                    <div class="panel-header">
+                        <h2 id="module-title">模块标题</h2>
+                        <p id="module-desc">模块简介加载中...</p>
+                    </div>
+                    
+                    <!-- 代数公式展示区 (KaTeX 渲染) -->
+                    <div class="math-box">
+                        <div id="math-formula">公式渲染中...</div>
+                    </div>
+                    
+                    <!-- 交互控制器容器 -->
+                    <div class="controls-card">
+                        <h3>交互式代数调节 (Sliders)</h3>
+                        <div id="controls-container">
+                            <!-- 由 JS 动态生成的滑块与输入框 -->
+                        </div>
+                    </div>
+                    
+                    <!-- 代数与几何的完美映射图例 -->
+                    <div class="mapping-card">
+                        <h3>代数 ↔ 几何 映射图例</h3>
+                        <div id="mapping-legend" class="legend-container">
+                            <!-- 由 JS 动态注入映射对应关系 -->
+                        </div>
+                    </div>
+                    
+                    <!-- 考研视点提示 -->
+                    <div class="exam-insight-card">
+                        <div class="insight-header">
+                            <svg viewBox="0 0 24 24" width="18" height="18" stroke="var(--primary-color)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                            </svg>
+                            <span>考研核心视点 (Exam Insights)</span>
+                        </div>
+                        <div id="exam-insight-content" class="insight-body">
+                            <!-- 考点精要说明 -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <!-- KaTeX 数学公式渲染脚本 -->
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    
+    <!-- Three.js 及其控制插件 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    
+    <!-- 系统模块入口 -->
+    <script type="module" src="app.js"></script>
+</body>
+</html>
