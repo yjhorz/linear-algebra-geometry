@@ -18,7 +18,7 @@
 </head>
 <body>
     <div class="app-container">
-        <!-- 侧边栏导航 -->
+        <!-- 侧边栏导航 - 6 大学术章节结构 -->
         <aside class="sidebar">
             <div class="sidebar-header">
                 <div class="logo">
@@ -29,58 +29,52 @@
                     </svg>
                     <span>线代几何之光</span>
                 </div>
-                <span class="sub-logo">考研核心考纲直观可视</span>
+                <span class="sub-logo">考研线代大纲全几何映射</span>
             </div>
             
             <nav class="sidebar-nav">
                 <ul class="nav-list">
                     <li>
-                        <button class="nav-item active" data-module="determinant">
-                            <span class="nav-icon">|A|</span>
-                            <span class="nav-text">行列式的几何意义</span>
+                        <button class="nav-item active" data-chapter="1">
+                            <span class="nav-icon">Ch1</span>
+                            <span class="nav-text">行列式与矩阵基础</span>
                         </button>
                     </li>
                     <li>
-                        <button class="nav-item" data-module="transform">
-                            <span class="nav-icon">Ax</span>
-                            <span class="nav-text">矩阵与线性变换</span>
+                        <button class="nav-item" data-chapter="2">
+                            <span class="nav-icon">Ch2</span>
+                            <span class="nav-text">矩阵的四大核心关系</span>
                         </button>
                     </li>
                     <li>
-                        <button class="nav-item" data-module="equations">
-                            <span class="nav-icon">x=b</span>
-                            <span class="nav-text">方程组解的几何空间</span>
+                        <button class="nav-item" data-chapter="3">
+                            <span class="nav-icon">Ch3</span>
+                            <span class="nav-text">向量空间与相关性</span>
                         </button>
                     </li>
                     <li>
-                        <button class="nav-item" data-module="vector">
-                            <span class="nav-icon">Span</span>
-                            <span class="nav-text">向量相关性与秩</span>
+                        <button class="nav-item" data-chapter="4">
+                            <span class="nav-icon">Ch4</span>
+                            <span class="nav-text">线性方程组解空间</span>
                         </button>
                     </li>
                     <li>
-                        <button class="nav-item" data-module="eigen">
-                            <span class="nav-icon">λv</span>
-                            <span class="nav-text">特征值与特征向量</span>
+                        <button class="nav-item" data-chapter="5">
+                            <span class="nav-icon">Ch5</span>
+                            <span class="nav-text">特征值与对角化</span>
                         </button>
                     </li>
                     <li>
-                        <button class="nav-item" data-module="orthogonal">
-                            <span class="nav-icon">α⊥β</span>
-                            <span class="nav-text">施密特正交化</span>
-                        </button>
-                    </li>
-                    <li>
-                        <button class="nav-item" data-module="quadratic">
-                            <span class="nav-icon">xᵀAx</span>
-                            <span class="nav-text">合同相似与正定</span>
+                        <button class="nav-item" data-chapter="6">
+                            <span class="nav-icon">Ch6</span>
+                            <span class="nav-text">二次型与正定性</span>
                         </button>
                     </li>
                 </ul>
             </nav>
             
             <div class="sidebar-footer">
-                <p>考研线代几何化复习系统</p>
+                <p>考研线代几何化系统 v2.0</p>
                 <div class="github-link-placeholder">
                     <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
@@ -92,16 +86,40 @@
         
         <!-- 主内容区 -->
         <main class="main-content">
-            <!-- 几何画布渲染区 -->
+            <!-- 几何画布渲染区 - 支持多种渲染模式（单3D, 双3D对比, 单2D, 双2D对比） -->
             <section class="canvas-section">
-                <!-- 3D 渲染容器 -->
+                <!-- 1. 单 3D 渲染容器 -->
                 <div id="three-container" class="canvas-container"></div>
-                <!-- 2D 绘图容器 (按需显示) -->
+                
+                <!-- 2. 双 3D 对比渲染容器 -->
+                <div id="three-dual-container" class="canvas-container dual-grid hidden">
+                    <div id="three-left" class="sub-canvas">
+                        <div class="canvas-label">矩阵 A (或变换前)</div>
+                    </div>
+                    <div id="three-right" class="sub-canvas">
+                        <div class="canvas-label" id="three-right-label">矩阵 B (或变换后)</div>
+                    </div>
+                </div>
+                
+                <!-- 3. 单 2D 绘图容器 -->
                 <div id="canvas-2d-container" class="canvas-container hidden">
                     <canvas id="main-canvas-2d"></canvas>
                 </div>
-                <!-- 3D空间提示说明 -->
-                <div class="3d-controls-hint">
+                
+                <!-- 4. 双 2D 对比绘图容器 -->
+                <div id="canvas-2d-dual-container" class="canvas-container dual-grid hidden">
+                    <div class="sub-canvas-2d">
+                        <canvas id="canvas-2d-left"></canvas>
+                        <div class="canvas-label">变换 A (输入网格)</div>
+                    </div>
+                    <div class="sub-canvas-2d">
+                        <canvas id="canvas-2d-right"></canvas>
+                        <div class="canvas-label" id="canvas-2d-right-label">变换 B (特征网格)</div>
+                    </div>
+                </div>
+                
+                <!-- 空间提示说明 -->
+                <div class="3d-controls-hint" id="spatial-hint">
                     <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="10"></circle>
                         <path d="M12 16v-4"></path>
@@ -114,10 +132,13 @@
             <!-- 控制与代数映射面板 -->
             <section class="control-section">
                 <div class="glass-panel">
-                    <!-- 动态注入模块标题与简介 -->
+                    <!-- 动态注入章节与子Tab栏 -->
                     <div class="panel-header">
-                        <h2 id="module-title">模块标题</h2>
-                        <p id="module-desc">模块简介加载中...</p>
+                        <h2 id="chapter-title">章节标题</h2>
+                        <!-- 子标签页导航 (Tabs) -->
+                        <div class="sub-tabs-container" id="sub-tabs-bar">
+                            <!-- JS 动态注入的子 Tabs -->
+                        </div>
                     </div>
                     
                     <!-- 代数公式展示区 (KaTeX 渲染) -->
@@ -127,9 +148,9 @@
                     
                     <!-- 交互控制器容器 -->
                     <div class="controls-card">
-                        <h3>交互式代数调节 (Sliders)</h3>
+                        <h3 id="controls-card-title">交互式代数调节 (Sliders)</h3>
                         <div id="controls-container">
-                            <!-- 由 JS 动态生成的滑块与输入框 -->
+                            <!-- 由 JS 动态生成的滑块与按钮 -->
                         </div>
                     </div>
                     
