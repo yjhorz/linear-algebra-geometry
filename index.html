@@ -5,6 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>考研线性代数几何图像化学习系统</title>
     
+    <!-- 极速自检错误诊断引擎 (Uncaught Exception Diagnostic Overlay) -->
+    <script>
+        window.onerror = function(message, source, lineno, colno, error) {
+            var errDiv = document.getElementById('runtime-error-overlay');
+            if (!errDiv) {
+                errDiv = document.createElement('div');
+                errDiv.id = 'runtime-error-overlay';
+                errDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;background:#ef4444;color:#fff;padding:20px;z-index:999999;font-family:monospace;font-size:14px;line-height:1.6;box-shadow:0 4px 20px rgba(0,0,0,0.6);text-align:left;box-sizing:border-box;border-bottom:3px solid #b91c1c;';
+                // 等待 body 加载好后插入
+                if (document.body) {
+                    document.body.insertBefore(errDiv, document.body.firstChild);
+                } else {
+                    document.documentElement.appendChild(errDiv);
+                }
+            }
+            errDiv.innerHTML = '<h3 style="margin:0 0 10px 0;font-size:16px;color:#fff;font-weight:700;">⚠️ 网页运行时错误诊断 (Uncaught Runtime Exception)</h3>' +
+                '<strong>错误消息:</strong> ' + message + '<br>' +
+                '<strong>出错文件:</strong> ' + source + '<br>' +
+                '<strong>具体位置:</strong> 行号 ' + lineno + ' | 列号 ' + colno + '<br><br>' +
+                '<span style="font-size:12.5px;background:rgba(0,0,0,0.2);padding:6px 10px;border-radius:6px;display:block;line-height:1.7;">' +
+                '💡 <b>修复建议：</b>这通常是因为浏览器加载了本地缓存的旧脚本，或是直接双击 HTML 文件（被 CORS 策略拦截）。<br>' +
+                '1. 请确保您是通过双击 <b>run_local.bat</b>，并在打开的浏览器页面中浏览系统。<br>' +
+                '2. 请按下 <b>Ctrl + F5</b> 强制刷新网页，或清除浏览器缓存重新加载！' +
+                '</span>';
+            return false;
+        };
+    </script>
+    
     <!-- KaTeX 数学公式渲染样式 -->
     <link rel="stylesheet" href="https://npm.elemecdn.com/katex@0.16.8/dist/katex.min.css">
     
