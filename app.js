@@ -118,8 +118,21 @@ class App {
     
     // 初始化单 3D 渲染环境
     initSingleThree() {
-        const w = this.three.container.clientWidth;
-        const h = this.three.container.clientHeight;
+        let w = this.three.container.clientWidth;
+        let h = this.three.container.clientHeight;
+        
+        // 健壮性尺寸防 0 坍缩判定
+        if (!w || !h) {
+            const rect = this.three.container.getBoundingClientRect();
+            w = rect.width;
+            h = rect.height;
+        }
+        if (!w || !h) {
+            w = window.innerWidth - 460;
+            h = window.innerHeight;
+            if (w < 200) w = 600;
+            if (h < 200) h = 600;
+        }
         
         this.three.scene = new THREE.Scene();
         this.three.scene.background = new THREE.Color(0x060913);
@@ -128,7 +141,14 @@ class App {
         this.three.camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 1000);
         this.three.camera.position.set(8, 6, 10);
         
-        this.three.renderer = new THREE.WebGLRenderer({ antialias: true });
+        try {
+            this.three.renderer = new THREE.WebGLRenderer({ antialias: true });
+        } catch (e) {
+            console.error("WebGL Renderer creation failed:", e);
+            this.showWebGLWarning(this.three.container);
+            return;
+        }
+        
         this.three.renderer.setSize(w, h);
         this.three.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         this.three.renderer.shadowMap.enabled = true;
@@ -148,8 +168,31 @@ class App {
     initDualThree() {
         if (this.dualThree.active) return;
         
-        const w = this.dualThree.left.container.clientWidth;
-        const h = this.dualThree.left.container.clientHeight;
+        let w = this.dualThree.left.container.clientWidth;
+        let h = this.dualThree.left.container.clientHeight;
+        
+        // 健壮性尺寸防 0 坍缩判定
+        if (!w || !h) {
+            const rect = this.dualThree.left.container.getBoundingClientRect();
+            w = rect.width;
+            h = rect.height;
+        }
+        if (!w || !h) {
+            w = (window.innerWidth - 460) / 2;
+            h = window.innerHeight;
+            if (w < 100) w = 300;
+            if (h < 200) h = 600;
+        }
+        
+        // 尝试初始化渲染器，如有 WebGL 报错则展示警告
+        try {
+            const testRenderer = new THREE.WebGLRenderer();
+            testRenderer.dispose();
+        } catch (e) {
+            console.error("WebGL not supported for dual layout:", e);
+            this.showWebGLWarning(this.dualThree.left.container.parentNode);
+            return;
+        }
         
         // 左画布
         this.dualThree.left.scene = new THREE.Scene();
@@ -198,6 +241,58 @@ class App {
         cleanup(this.dualThree.left);
         cleanup(this.dualThree.right);
         this.dualThree.active = false;
+        
+        // 清理由于 WebGL 报错产生的警告面板
+        const warning = document.querySelector('.webgl-warning');
+        if (warning) warning.remove();
+    }
+    
+    showWebGLWarning(container) {
+        if (container.querySelector('.webgl-warning')) return; // 防止重复注入
+        
+        const warningDiv = document.createElement('div');
+        warningDiv.className = 'webgl-warning';
+        warningDiv.style.cssText = `
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(6, 9, 19, 0.96);
+            color: #ef4444;
+            padding: 30px;
+            text-align: center;
+            z-index: 100;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            backdrop-filter: blur(10px);
+        `;
+        warningDiv.innerHTML = `
+            <svg viewBox="0 0 24 24" width="48" height="48" stroke="#ef4444" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 20px; filter: drop-shadow(0 0 10px rgba(239, 68, 68, 0.4));">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                <line x1="12" y1="9" x2="12" y2="13"></line>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            <h3 style="color: #ffffff; font-size: 18px; margin-bottom: 12px; font-weight: 700; font-family: var(--font-display);">3D 渲染启动失败 (低配/未开启硬件加速)</h3>
+            <p style="color: #9ca3af; font-size: 13.5px; max-width: 460px; margin-bottom: 20px; line-height: 1.6; font-family: var(--font-display);">
+                检测到您的浏览器或设备目前不支持 <b>WebGL 硬件加速</b>。<br>
+                这通常不是配置高低的问题，而是浏览器设置关闭了图形加速，或者缺少显卡驱动。
+            </p>
+            <div style="text-align: left; color: #f3f4f6; font-size: 12.5px; max-width: 420px; background: rgba(255,255,255,0.03); padding: 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 20px; line-height: 1.8; font-family: var(--font-display);">
+                <b>💡 极速排查与修复方法：</b><br>
+                1. 打开 Chrome/Edge 浏览器设置 ➔ 搜索 <b>“硬件加速”</b> ➔ 开启 <b>“使用图形加速（如果可用）”</b> ➔ <b>重启浏览器</b>。<br>
+                2. 访问 <a href="https://webglreport.com" target="_blank" style="color: #3b82f6; text-decoration: underline;">webglreport.com</a> 验证您的 3D 支持能力。<br>
+                3. 如果确实无法开启，您仍然可以使用本系统的 <b>2D 章节模块</b>（如 Ch5 特征值磁吸挑战游戏，Ch3 的 2D 坐标变换等）。
+            </div>
+            <button onclick="window.location.reload()" style="background: linear-gradient(135deg, #ef4444, #b91c1c); color: #fff; padding: 10px 24px; border-radius: 8px; font-size: 13.5px; font-weight: 600; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3); border: none; cursor: pointer; font-family: var(--font-display); outline: none;">
+                重新加载页面
+            </button>
+        `;
+        container.style.position = 'relative';
+        container.appendChild(warningDiv);
     }
     
     setupLights(scene, lightList) {
