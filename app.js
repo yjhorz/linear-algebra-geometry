@@ -128,7 +128,7 @@ class App {
             h = rect.height;
         }
         if (!w || !h) {
-            w = window.innerWidth - 460;
+            w = window.innerWidth - 500;
             h = window.innerHeight;
             if (w < 200) w = 600;
             if (h < 200) h = 600;
@@ -178,7 +178,7 @@ class App {
             h = rect.height;
         }
         if (!w || !h) {
-            w = (window.innerWidth - 460) / 2;
+            w = (window.innerWidth - 500) / 2;
             h = window.innerHeight;
             if (w < 100) w = 300;
             if (h < 200) h = 600;
