@@ -54,11 +54,11 @@ export class Chapter1Basics {
             `
             <p><strong>1. 行列式与秩、可逆性、相关性的完美统一：</strong></p>
             <ul>
-                <li><strong>|A| ≠ 0 </strong> $\rightarrow$ 3D体积非零 $\rightarrow$ 空间未发生坍缩 $\rightarrow$ 秩 $r(A)=3$ $\rightarrow$ 矩阵可逆 $\rightarrow$ 向量组线性无关。</li>
-                <li><strong>|A| = 0 </strong> $\rightarrow$ 六面体被压扁 $\rightarrow$ **维度坍缩** $\rightarrow$ 秩 $r(A)<3$ $\rightarrow$ 矩阵不可逆 $\rightarrow$ 向量组共面或共线线性相关。</li>
+                <li><strong>|A| ≠ 0 </strong> $\\rightarrow$ 3D体积非零 $\\rightarrow$ 空间未发生坍缩 $\\rightarrow$ 秩 $r(A)=3$ $\\rightarrow$ 矩阵可逆 $\\rightarrow$ 向量组线性无关。</li>
+                <li><strong>|A| = 0 </strong> $\\rightarrow$ 六面体被压扁 $\\rightarrow$ **维度坍缩** $\\rightarrow$ 秩 $r(A)<3$ $\\rightarrow$ 矩阵不可逆 $\\rightarrow$ 向量组共面或共线线性相关。</li>
             </ul>
             <p><strong>2. 拖动滑块体验维度塌缩：</strong></p>
-            <p>拖动下方滑块控制 $\vec{\alpha}_3$ 的 $z$ 分量（代表高度）。当高度降为 0 时，六面体压扁成一个面，体积为 0，行列式 $|A| = 0$！</p>
+            <p>拖动下方滑块控制 $\\vec{\\alpha}_3$ 的 $z$ 分量（代表高度）。当高度降为 0 时，六面体压扁成一个面，体积为 0，行列式 $|A| = 0$！</p>
             `
         );
         
