@@ -208,7 +208,7 @@ button {
 /* 主内容区划分 */
 .main-content {
     display: grid;
-    grid-template-columns: 1fr 440px;
+    grid-template-columns: 1fr 480px;
     height: 100%;
     overflow: hidden;
 }
@@ -317,10 +317,10 @@ canvas {
 
 /* 玻璃卡片主体 */
 .glass-panel {
-    padding: 26px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
-    gap: 22px;
+    gap: 18px;
     min-height: 100%;
 }
 
@@ -378,21 +378,32 @@ canvas {
     background-color: rgba(0, 0, 0, 0.25);
     border: 1px solid var(--glass-border);
     border-radius: 16px;
-    padding: 20px;
+    padding: 14px 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 80px;
+    min-height: 100px;
     box-shadow: inset 0 2px 8px rgba(0,0,0,0.3);
     position: relative;
     overflow-x: auto;
 }
 
+.math-box .katex-display {
+    margin: 4px 0;
+    width: 100%;
+    white-space: normal;
+}
+
+.math-box .katex-display > .katex {
+    white-space: normal;
+}
+
 #math-formula {
-    font-size: 16px;
+    font-size: 14.5px;
     color: var(--text-white);
     text-align: center;
-    white-space: nowrap;
+    white-space: normal;
+    word-break: break-word;
 }
 
 /* 精美卡片组件 */
