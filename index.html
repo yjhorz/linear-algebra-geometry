@@ -5,36 +5,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>考研线性代数几何图像化学习系统</title>
     
-    <!-- 极速自检错误诊断引擎 (Uncaught Exception Diagnostic Overlay) -->
+    <!-- 极速自检错误诊断引擎 (Uncaught Exception & Resource Loading Diagnostic Overlay) -->
     <script>
-        window.onerror = function(message, source, lineno, colno, error) {
+        function showDiagnosticError(title, msg, suggestion) {
             var errDiv = document.getElementById('runtime-error-overlay');
             if (!errDiv) {
                 errDiv = document.createElement('div');
                 errDiv.id = 'runtime-error-overlay';
-                errDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;background:#ef4444;color:#fff;padding:20px;z-index:999999;font-family:monospace;font-size:14px;line-height:1.6;box-shadow:0 4px 20px rgba(0,0,0,0.6);text-align:left;box-sizing:border-box;border-bottom:3px solid #b91c1c;';
-                // 等待 body 加载好后插入
+                errDiv.style.cssText = 'position:fixed;top:0;left:0;width:100%;max-height:100%;overflow-y:auto;background:#ef4444;color:#fff;padding:20px;z-index:999999;font-family:monospace;font-size:14px;line-height:1.6;box-shadow:0 4px 20px rgba(0,0,0,0.6);text-align:left;box-sizing:border-box;border-bottom:3px solid #b91c1c;';
                 if (document.body) {
                     document.body.insertBefore(errDiv, document.body.firstChild);
                 } else {
                     document.documentElement.appendChild(errDiv);
                 }
             }
-            errDiv.innerHTML = '<h3 style="margin:0 0 10px 0;font-size:16px;color:#fff;font-weight:700;">⚠️ 网页运行时错误诊断 (Uncaught Runtime Exception)</h3>' +
+            var item = document.createElement('div');
+            item.style.marginBottom = '20px';
+            item.style.borderBottom = '1px solid rgba(255,255,255,0.3)';
+            item.style.paddingBottom = '15px';
+            item.innerHTML = '<h3 style="margin:0 0 10px 0;font-size:16px;color:#fff;font-weight:700;">⚠️ ' + title + '</h3>' +
+                msg + '<br><br>' +
+                '<span style="font-size:12.5px;background:rgba(0,0,0,0.2);padding:6px 10px;border-radius:6px;display:block;line-height:1.7;">' +
+                '💡 <b>修复建议：</b>' + suggestion +
+                '</span>';
+            errDiv.appendChild(item);
+        }
+
+        window.onerror = function(message, source, lineno, colno, error) {
+            showDiagnosticError(
+                '网页运行时错误诊断 (Uncaught Runtime Exception)',
                 '<strong>错误消息:</strong> ' + message + '<br>' +
                 '<strong>出错文件:</strong> ' + source + '<br>' +
-                '<strong>具体位置:</strong> 行号 ' + lineno + ' | 列号 ' + colno + '<br><br>' +
-                '<span style="font-size:12.5px;background:rgba(0,0,0,0.2);padding:6px 10px;border-radius:6px;display:block;line-height:1.7;">' +
-                '💡 <b>修复建议：</b>这通常是因为浏览器加载了本地缓存的旧脚本，或是直接双击 HTML 文件（被 CORS 策略拦截）。<br>' +
-                '1. 请确保您是通过双击 <b>run_local.bat</b>，并在打开的浏览器页面中浏览系统。<br>' +
-                '2. 请按下 <b>Ctrl + F5</b> 强制刷新网页，或清除浏览器缓存重新加载！' +
-                '</span>';
+                '<strong>具体位置:</strong> 行号 ' + lineno + ' | 列号 ' + colno,
+                '这通常是因为浏览器加载了本地缓存的旧脚本，或是直接双击 HTML 文件（被 CORS 策略拦截）。<br>1. 请确保您是通过双击 <b>run_local.bat</b>，并在打开的浏览器页面中浏览系统。<br>2. 请按下 <b>Ctrl + F5</b> 强制刷新网页，或清除浏览器缓存重新加载！'
+            );
             return false;
         };
+
+        // 捕获模块/资源加载失败 (CORS 或 404 阻断)
+        window.addEventListener('error', function(event) {
+            if (event.target && (event.target.tagName === 'SCRIPT' || event.target.tagName === 'LINK')) {
+                var src = event.target.src || event.target.href;
+                var isLocalFile = window.location.protocol === 'file:';
+                var suggestion = isLocalFile 
+                    ? '检测到您直接双击打开了 HTML 文件。现代浏览器出于安全策略 (CORS) 会拦截本地 ES6 模块脚本。<b>请务必双击运行 run_local.bat 来访问本系统！</b>'
+                    : '检测到脚本或样式资源加载失败。可能是网络波动或 CDN 拦截。请检查您的网络连接并尝试按下 <b>Ctrl + F5</b> 强制刷新。';
+                
+                showDiagnosticError(
+                    '资源加载失败诊断 (Resource Loading Blocked)',
+                    '<strong>阻断资源:</strong> ' + src + '<br>' +
+                    '<strong>运行协议:</strong> ' + window.location.protocol,
+                    suggestion
+                );
+            }
+        }, true);
     </script>
     
     <!-- KaTeX 数学公式渲染样式 -->
-    <link rel="stylesheet" href="https://npm.elemecdn.com/katex@0.16.8/dist/katex.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css">
     
     <!-- Google Fonts 字体 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -209,11 +237,30 @@
     </div>
     
     <!-- KaTeX 数学公式渲染脚本 -->
-    <script src="https://npm.elemecdn.com/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.js"></script>
+    <script>
+        if (typeof katex === 'undefined') {
+            console.warn('cdnjs KaTeX failed to load, trying unpkg...');
+            document.write('<script src="https://unpkg.com/katex@0.16.8/dist/katex.min.js"><\/script>');
+        }
+    </script>
     
-    <!-- Three.js 及其控制插件 -->
-    <script src="https://npm.elemecdn.com/three@0.128.0/build/three.min.js"></script>
-    <script src="https://npm.elemecdn.com/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <!-- Three.js 及其控制插件 (已下载为本地库，确保 100% 离线完美加载与出图) -->
+    <script src="three.min.js"></script>
+    <script>
+        if (typeof THREE === 'undefined') {
+            console.warn('Local three.min.js failed to load, trying unpkg CDN...');
+            document.write('<script src="https://unpkg.com/three@0.128.0/build/three.min.js"><\/script>');
+        }
+    </script>
+    
+    <script src="OrbitControls.js"></script>
+    <script>
+        if (typeof THREE !== 'undefined' && typeof THREE.OrbitControls === 'undefined') {
+            console.warn('Local OrbitControls.js failed to load, trying unpkg CDN...');
+            document.write('<script src="https://unpkg.com/three@0.128.0/examples/js/controls/OrbitControls.js"><\/script>');
+        }
+    </script>
     
     <!-- 系统模块入口 -->
     <script type="module" src="app.js"></script>
