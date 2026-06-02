@@ -67,9 +67,9 @@ export class Chapter5Eigen {
             "特征向量是空间扭曲形变中，方向完全保持不变的特殊直线；特征值是它在其上的单纯拉伸倍数。",
             `
             <p><strong>特征向量磁吸挑战：</strong></p>
-            <p>1. 在左侧画布上，用鼠标任意拖拽白色的输入向量 $\vec{x}$。</p>
-            <p>2. 观察粉色变换向量 $A\vec{x}$。当且仅当指针被吸附到<strong>蓝色或黄色特征直线</strong>上时，它们发生完美共线！</p>
-            <p>3. 此时发生磁吸霓虹高亮，公式计算板实时锁死展示拉伸特征值 $\lambda$。</p>
+            <p>1. 在左侧画布上，用鼠标任意拖拽白色的输入向量 $\\vec{x}$。</p>
+            <p>2. 观察粉色变换向量 $A\\vec{x}$。当且仅当指针被吸附到<strong>蓝色或黄色特征直线</strong>上时，它们发生完美共线！</p>
+            <p>3. 此时发生磁吸霓虹高亮，公式计算板实时锁死展示拉伸特征值 $\\lambda$。</p>
             `
         );
         
@@ -128,7 +128,7 @@ export class Chapter5Eigen {
             <p><strong>1. 正交旋转拉直主轴：</strong></p>
             <p>左侧展示对称矩阵 $A$ 的偏斜形变网格。可以看到，它的特征向量（蓝色和粉色轴线）呈正交 90° 斜指。**点击下方对角化旋转按钮**，您将看到空间发生刚性旋转！</p>
             <p><strong>2. 相似对角阵的完美状态：</strong></p>
-            <p>旋转 45° 之后，右侧特征主轴与水平垂直的 X、Y 坐标轴完全重合，此时空间形变在对角矩阵 $\Lambda$ 的驱动下，表现为最单纯的**轴向垂直拉伸**。</p>
+            <p>旋转 45° 之后，右侧特征主轴与水平垂直的 X、Y 坐标轴完全重合，此时空间形变在对角矩阵 $\\Lambda$ 的驱动下，表现为最单纯的**轴向垂直拉伸**。</p>
             `
         );
         
@@ -349,6 +349,7 @@ export class Chapter5Eigen {
     // ==========================================
     draw() {
         if (this.currentTab !== "eigen_hunt") return;
+        if (!this.eigenResults) return; // 安全哨兵：防止未计算特征值前被 resize/renderMode 触发重绘
         
         const canvas = this.app.canvas2d.canvas;
         const ctx = this.app.canvas2d.ctx;
