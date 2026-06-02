@@ -43,7 +43,7 @@ export class VectorModule {
             <p><strong>2. 极大线性无关组：</strong></p>
             <p>即使我们有一百个向量，只要它们共面，它们之中能挑出撑起这个平面的<strong>最大且最简的非共线骨架（最多2个非共线向量）</strong>，就是极大线性无关组。</p>
             <p><strong>3. 秩 (Rank) 的几何真谛：</strong></p>
-            <p>代数里深奥的“矩阵的秩”，几何上极其质朴：<strong>它就是张成空间的物理几何维度值</strong>（1D线 $\rightarrow$ 秩1，2D面 $\rightarrow$ 秩2，3D体 $\rightarrow$ 秩3）。</p>
+            <p>代数里深奥的“矩阵的秩”，几何上极其质朴：<strong>它就是张成空间的物理几何维度值</strong>（1D线 $\\rightarrow$ 秩1，2D面 $\\rightarrow$ 秩2，3D体 $\\rightarrow$ 秩3）。</p>
             `
         );
         
